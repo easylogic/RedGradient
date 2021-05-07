@@ -1,6 +1,7 @@
 import React from "react";
 import GRADIENT_TYPE from "./GRADIENT_TYPE";
 import DataItem from "./DataItem";
+import DataLayer from "./DataLayer";
 
 
 const SIZE_MARGIN = 20;
@@ -13,7 +14,6 @@ class Red_Layer extends React.Component {
     data.visible = !data.visible;
     this.props.rootComponent.setState({});
   }
-
   render() {
     const rootComponent = this.props.rootComponent;
     const rootComponentState = rootComponent.state;
@@ -49,11 +49,7 @@ class Red_Layer extends React.Component {
                         layers.splice(layers.indexOf(layer),1)
                         let targetLayer = layer
                         if(!layers.length) {
-                          layers.push(targetLayer = {
-                            title: 'undefined',
-                            visible: true,
-                            items:[new DataItem()]
-                          })
+                          layers.push(targetLayer = new DataLayer())
                         }
                         rootComponent.setState({activeData : targetLayer,activeSubData : targetLayer['items'][0]})
                       }}
@@ -119,7 +115,7 @@ Red_Layer.calcGradientItem = (data, checkVisible, layer) => {
 
   if (data['type'] === GRADIENT_TYPE.LINEAR) {
     const gradients = data['colorList'].map(v => {
-      let colorRangeTxt = v['range'] === undefined ? '' : `${v['range']}${v['rangeUnit']}`;
+      let colorRangeTxt = v['range'] === undefined ? '' : `${v['range']}%`;
       return `${v['color']} ${colorRangeTxt}`;
     });
     let positionTxt = data['position'] ? ` ${data['position']['x']}${data['position']['xUnit']} ${data['position']['y']}${data['position']['yUnit']}` : '';
@@ -128,7 +124,7 @@ Red_Layer.calcGradientItem = (data, checkVisible, layer) => {
     return `${data['type']}(${data['deg']}deg, ${gradients}) ${positionTxt} / ${sizeTxt}`;
   } else {
     const gradients = data['colorList'].map(v => {
-      let colorRangeTxt = v['range'] === undefined ? '' : `${v['range']}${v['rangeUnit']}`;
+      let colorRangeTxt = v['range'] === undefined ? '' : `${v['range']}%`;
       return `${v['color']} ${colorRangeTxt}`;
     });
     let positionTxt = data['position'] ? ` ${data['position']['x']}${data['position']['xUnit']} ${data['position']['y']}${data['position']['yUnit']}` : '';
